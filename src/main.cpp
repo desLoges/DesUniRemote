@@ -49,7 +49,7 @@ Modified for ESP8266 by Jon Ulmer Nov 2016
 #define APDS9960_INT    D6  //AKA GPIO12 -- Interupt pin
 #define APDS9960_SDA    D3  //AKA GPIO0
 #define APDS9960_SCL    D1  //AKA GPIO5
-IRsend irsend(4);  // An IR LED is controlled by GPIO pin 4 (D2)
+IRsend irsend(D2);  // An IR LED is controlled by GPIO pin 4 (D2)
 uint16_t RECV_PIN = 14;
 
 
