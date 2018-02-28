@@ -1,6 +1,42 @@
 #include "uniremote.h"
 
 
+//connect to WiFi
+bool set_wifiConnection(ESP8266WiFiMulti wifi_c){
+  bool ret = false;
+
+  Serial.print(F("Connecting to SSID: "));
+  Serial.println(F(WIFI_SSID));
+  wifi_c.addAP(WIFI_SSID, WIFI_PASS);
+
+  Serial.println(F("Waiting for WiFi"));
+
+  uint8_t retry=0;
+  while((wifi_c.run() != WL_CONNECTED) && (retry <= WIFI_CONNECT_RETRY_LIMIT)) {
+    Serial.println(F("."));
+    LED_BUILTIN_OFF;
+    delay(500);
+    LED_BUILTIN_ON;
+    retry++;
+    delay(500);
+  }
+  LED_BUILTIN_OFF;
+
+  if (retry >= WIFI_CONNECT_RETRY_LIMIT){
+    //Wifi connection failed
+    Serial.println(F("ERROR: WiFi connecion Failed! :()"));
+    fatal_error();
+    ret = false;
+  }else{
+    //Wifi connection success
+    Serial.println(F("OK: WiFi connected! :)"));
+    Serial.print(F("OK: Assigned IP address: "));
+    Serial.println(WiFi.localIP());
+    ret = true;
+  }
+  return ret;
+}
+
 void init_guestrure_sensor(SparkFun_APDS9960 gs){
   pinMode(APDS9960_INT, INPUT);
 
@@ -9,16 +45,16 @@ void init_guestrure_sensor(SparkFun_APDS9960 gs){
 
   // Initialize APDS-9960 (configure I2C and initial values)
   if ( gs.init() ) {
-    Serial.println(F("APDS-9960 initialization complete"));
+    Serial.println(F("OK: APDS-9960 initialization complete"));
   } else {
-    Serial.println(F("Something went wrong during APDS-9960 init!"));
+    Serial.println(F("ERROR: APDS-9960 init!"));
   }
 
   // Start running the APDS-9960 gesture sensor engine
   if ( gs.enableGestureSensor(true) ) {
-    Serial.println(F("Gesture sensor is now running"));
+    Serial.println(F("OK: Gesture sensor is now running"));
   } else {
-    Serial.println(F("Something went wrong during gesture sensor init!"));
+    Serial.println(F("ERROR: Gesture sensor init!"));
   }
 }
 
@@ -64,8 +100,8 @@ void init_serial(void){
 }
 
 void fatal_error(void){
-  BUILDIN_LED_ON
+  LED_BUILTIN_ON
   delay(100);
-  BUILDIN_LED_OFF
+  LED_BUILTIN_OFF
   delay(1000);
 }

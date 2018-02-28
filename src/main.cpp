@@ -4,6 +4,9 @@
 
 // Global Variables
 volatile bool isr_guesture_flag = 0;
+
+// Objects
+ESP8266WiFiMulti WiFiMulti;
 IRsend irsend(IR_LED);
 SparkFun_APDS9960 guestsens = SparkFun_APDS9960();
 RCSwitch mySwitch = RCSwitch();
@@ -12,21 +15,26 @@ RCSwitch mySwitch = RCSwitch();
 ////////////////////////////////////////////////////////////////////////////////
 void setup() {
   pinMode(BUILTIN_LED, OUTPUT);
-  BUILDIN_LED_ON
+  LED_BUILTIN_ON
 
   // Initialize Serial port
   init_serial();
   Serial.println(F("Universal Remote start"));
 
+  if( !set_wifiConnection(WiFiMulti) ){
+   ESP.restart();
+  }
+
   // Start I2C with pins defined above
   Wire.begin(I2C_PIN_SDA,I2C_PIN_SCL);
+
   // Start peripherals
   mySwitch.enableReceive(RF_RECEIVE);
   mySwitch.enableTransmit(RF_SEND);
   irsend.begin();
-
   init_guestrure_sensor(guestsens);
-  BUILDIN_LED_OFF
+
+  LED_BUILTIN_OFF
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -39,9 +47,9 @@ void loop() {
     GUESTURE_INT_EN;
   }
 
-  BUILDIN_LED_ON
+  LED_BUILTIN_ON
   delay(100);
-  BUILDIN_LED_OFF
+  LED_BUILTIN_OFF
   delay(200);
 }
 
