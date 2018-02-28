@@ -4,14 +4,17 @@
 #include <IRrecv.h>
 #include <IRutils.h>
 #include <IRsend.h>
+#include <RCSwitch.h>
 
 
 // Pins on wemos D1 mini
 #define I2C_PIN_SDA         D3
 #define I2C_PIN_SCL         D1
-#define APDS9960_INT    D6
-#define IR_LED          D2
-#define RF_SEND         0
+#define APDS9960_INT        D6
+#define IR_LED              D2
+#define RF_SEND             D4
+#define RF_RECEIVE          D5
+
 
 #define BUILDIN_LED_ON      digitalWrite(BUILTIN_LED, HIGH);
 #define BUILDIN_LED_OFF     digitalWrite(BUILTIN_LED, LOW);

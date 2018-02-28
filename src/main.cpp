@@ -4,8 +4,9 @@
 
 // Global Variables
 volatile bool isr_guesture_flag = 0;
-IRsend irsend(IR_LED);  // An IR LED is controlled by GPIO pin 4 (D2)
+IRsend irsend(IR_LED);
 SparkFun_APDS9960 guestsens = SparkFun_APDS9960();
+RCSwitch mySwitch = RCSwitch();
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,8 +18,11 @@ void setup() {
   init_serial();
   Serial.println(F("Universal Remote start"));
 
-  //Start I2C with pins defined above
+  // Start I2C with pins defined above
   Wire.begin(I2C_PIN_SDA,I2C_PIN_SCL);
+  // Start peripherals
+  mySwitch.enableReceive(RF_RECEIVE);
+  mySwitch.enableTransmit(RF_SEND);
   irsend.begin();
 
   init_guestrure_sensor(guestsens);
