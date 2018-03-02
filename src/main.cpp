@@ -34,6 +34,12 @@ void setup() {
   irsend.begin();
   init_guestrure_sensor(guestsens);
 
+
+  String url = "http://";
+  url += WIFI_LED_STRIP_IP;
+  url += "/api/color?apikey=82C05D44978333AD&value=255,0,0"; ///"/trigger/door_status/with/key/";  //&value=#0055ff
+
+  send_http_request(url);
   LED_BUILTIN_OFF
 }
 

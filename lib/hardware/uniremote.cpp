@@ -37,6 +37,27 @@ bool set_wifiConnection(ESP8266WiFiMulti wifi_c){
   return ret;
 }
 
+
+int send_http_request(String url){
+  Serial.println(url);
+  HTTPClient http;
+
+  http.begin(url); //HTTP
+  int httpCode = http.GET();
+
+  // httpCode will be negative on error
+  if(httpCode > 0) {
+    // HTTP header has been send and Server response header has been handled
+    // file found at server
+    if(httpCode == HTTP_CODE_OK) {
+      String payload = http.getString();
+    }
+  }
+
+  http.end();
+  return httpCode;
+}
+
 void init_guestrure_sensor(SparkFun_APDS9960 gs){
   pinMode(APDS9960_INT, INPUT);
 
